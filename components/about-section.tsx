@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { GraduationCap, Code, Target } from "lucide-react"
 
 export function AboutSection() {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
 
   const cards = [
     {
@@ -26,33 +26,48 @@ export function AboutSection() {
     },
   ]
 
+  const fullSlogan = (t.about as any).slogan || "Turning raw data into actionable insights";
+
+  const words = fullSlogan.split(" ");
+
+  const numToHighlight = language === 'vi' ? 3 : 2;
+
+  // Thực hiện cắt chuỗi theo số lượng từ đã xác định
+  const highlightWords = words.slice(-numToHighlight).join(" ");
+  const normalWords = words.slice(0, -numToHighlight).join(" ");
+
   return (
     <section id="about" className="py-24 bg-white">
       <div className="container mx-auto px-6 md:px-12 max-w-6xl">
-
+        
         <div className="grid gap-12 lg:grid-cols-2 items-center mb-16">
           
+          {/* Cột trái */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
+            {/* 1. Tiêu đề "About Me" */}
             <h2 className="text-blue-600 font-bold tracking-widest uppercase text-sm md:text-base mb-4 flex items-center gap-2">
               <span className="w-8 h-0.5 bg-blue-600 inline-block"></span>
               {t.about.title}
             </h2>
 
+            {/* 2. SLOGAN (Đã sửa logic tô màu) */}
             <h3 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-blue-950 leading-tight mb-6">
-                Turning raw data into <br />
-                <span className="text-blue-600">actionable insights</span>
+                {normalWords} <br />
+                <span className="text-blue-600">{highlightWords}</span>
             </h3>
 
+            {/* 3. Đoạn văn mô tả */}
             <p className="text-lg text-slate-600 leading-relaxed text-justify">
               {t.about.desc}
             </p>
           </motion.div>
 
+          {/* Cột phải: Ảnh Decor */}
           <motion.div
              initial={{ opacity: 0, scale: 0.9 }}
              whileInView={{ opacity: 1, scale: 1 }}
@@ -64,12 +79,12 @@ export function AboutSection() {
                 <div className="text-6xl font-bold text-blue-200">2026</div>
                 <p className="text-xl font-medium text-slate-500">Ready for new challenges</p>
              </div>
-             {/* Decor blobs */}
              <div className="absolute top-4 right-4 w-16 h-16 bg-blue-500/10 rounded-full blur-xl"></div>
              <div className="absolute bottom-4 left-4 w-24 h-24 bg-purple-500/10 rounded-full blur-xl"></div>
           </motion.div>
         </div>
 
+        {/* 3 CARDS */}
         <div className="grid gap-6 md:grid-cols-3">
           {cards.map((card, index) => (
             <motion.div

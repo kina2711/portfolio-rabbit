@@ -24,7 +24,8 @@ export const DATA = {
     },
     about: {
       title: "About Me",
-      desc: "Detail-oriented Data Analyst with over 1 year of experience in Healthcare and Marketing Analytics. Skilled in SQL, Python, and Data Visualization (Looker Studio/Power BI), I specialize in transforming raw data into actionable insights that drive platform performance and operational efficiency. With a Pharmacy degree providing deep domain understanding, I am now expanding my technical skillset into Data Engineering (ETL, BigQuery, Airflow) to build scalable data solutions. Eager to leverage this unique blend of analytical rigor and emerging engineering skills to contribute to a data-driven HealthTech environment. Furthermore, I have demonstrated versatility by applying analytical frameworks to diverse domains including Banking, HR, and Digital Marketing.",
+      slogan: "Turning raw data into actionable insights",
+      desc: "Detail-oriented Data Analyst with over 1 year of experience in Healthcare and Marketing Analytics. Skilled in SQL, Python, and Data Visualization (Looker Studio/Power BI), I specialize in transforming raw data into actionable insights that drive platform performance and operational efficiency. With a Pharmacy degree providing deep domain understanding, I am now expanding my technical skillset into Data Engineering (ETL, BigQuery, Airflow) to build scalable data solutions. Eager to leverage this unique blend of analytical rigor and emerging engineering skills to contribute to a data-driven HealthTech environment. Additionally, I aim to expand my analytical scope to diverse fields such as Banking, HR, and Digital Marketing.",
       cards: {
         bg: {
           title: "Domain Expertise",
@@ -343,7 +344,8 @@ export const DATA = {
     },
     about: {
       title: "Về Tôi",
-      desc: "Chuyên viên Phân tích Dữ liệu tỉ mỉ với hơn 1 năm kinh nghiệm trong lĩnh vực Y tế và Marketing Analytics. Thành thạo SQL, Python và Trực quan hóa dữ liệu (Looker Studio/Power BI), tôi chuyên biến dữ liệu thô thành những hiểu biết hành động giúp thúc đẩy hiệu suất nền tảng và hiệu quả vận hành. Với tấm bằng Dược sĩ cung cấp sự hiểu biết sâu sắc về nghiệp vụ, tôi hiện đang mở rộng kỹ năng kỹ thuật sang Kỹ thuật dữ liệu (ETL, BigQuery, Airflow) để xây dựng các giải pháp dữ liệu mở rộng. Mong muốn tận dụng sự kết hợp độc đáo giữa tư duy phân tích chặt chẽ và kỹ năng kỹ thuật mới để đóng góp cho môi trường HealthTech dựa trên dữ liệu. Ngoài ra, tôi đã chứng minh sự linh hoạt khi áp dụng tư duy phân tích vào các lĩnh vực đa dạng như Ngân hàng, Nhân sự và Digital Marketing.",
+      slogan: "Chuyển hóa dữ liệu thô thành những insight có tính ứng dụng cao",
+      desc: "Chuyên viên Phân tích Dữ liệu tỉ mỉ với hơn 1 năm kinh nghiệm trong lĩnh vực Y tế và Marketing Analytics. Thành thạo SQL, Python và Trực quan hóa dữ liệu (Looker Studio/Power BI), tôi chuyên biến dữ liệu thô thành những hiểu biết hành động giúp thúc đẩy hiệu suất nền tảng và hiệu quả vận hành. Với tấm bằng Dược sĩ cung cấp sự hiểu biết sâu sắc về nghiệp vụ, tôi hiện đang mở rộng kỹ năng kỹ thuật sang Kỹ thuật dữ liệu (ETL, BigQuery, Airflow) để xây dựng các giải pháp dữ liệu mở rộng. Mong muốn tận dụng sự kết hợp độc đáo giữa tư duy phân tích chặt chẽ và kỹ năng kỹ thuật mới để đóng góp cho môi trường HealthTech dựa trên dữ liệu. Ngoài ra, tôi mong muốn mở rộng và áp dụng tư duy phân tích vào các lĩnh vực đa dạng như Ngân hàng, Nhân sự và Digital Marketing.",
       cards: {
         bg: {
           title: "Kiến Thức Nghiệp Vụ",
@@ -462,11 +464,31 @@ export const DATA = {
         }
       ],
       soft: [
-        { name: "Data Storytelling", icon: "/skills/data-storytelling.svg", desc: "Proven ability to translate complex datasets into actionable insights for non-tech stakeholders." },
-        { name: "Leadership", icon: "/skills/leadership.svg", desc: "Founder/Admin of 'Xom Data' (20,000+ members) – Demonstrated strong sense of responsibility." },
-        { name: "Detail-Oriented", icon: "/skills/detail-oriented.svg", desc: "Experience handling sensitive Healthcare/Medical data, ensuring 99% data integrity." },
-        { name: "Growth Mindset", icon: "/skills/growth-mindset.svg", desc: "Thrives in fast-paced environments, self-taught new technologies (Airflow, Docker)." },
-        { name: "Critical Thinking", icon: "/skills/critical-thinking.svg", desc: "Ability to approach problems from both business and technical perspectives." }
+        { 
+          name: "Data Storytelling", 
+          icon: "/skills/data-storytelling.svg", 
+          desc: "Khả năng chuyển đổi các tập dữ liệu phức tạp thành những insight có tính ứng dụng cao (actionable insights) dành cho các bên liên quan phi kỹ thuật (non-tech stakeholders)." 
+        },
+        { 
+          name: "Leadership",
+          icon: "/skills/leadership.svg", 
+          desc: "Founder/Admin của cộng đồng 'Xóm Data' (hơn 20.000 thành viên) – Minh chứng cho tinh thần trách nhiệm cao và khả năng dẫn dắt cộng đồng." 
+        },
+        { 
+          name: "Detail-Oriented",
+          icon: "/skills/detail-oriented.svg", 
+          desc: "Dày dạn kinh nghiệm xử lý các dữ liệu Y tế/Sức khỏe nhạy cảm, đảm bảo tính toàn vẹn dữ liệu (data integrity) lên đến 99%." 
+        },
+        { 
+          name: "Growth Mindset",
+          icon: "/skills/growth-mindset.svg", 
+          desc: "Thích nghi và phát triển mạnh mẽ trong môi trường nhịp độ nhanh (fast-paced), chủ động tự trau dồi các công nghệ mới (Airflow, Docker)." 
+        },
+        { 
+          name: "Critical Thinking",
+          icon: "/skills/critical-thinking.svg", 
+          desc: "Sở hữu tư duy tiếp cận vấn đề đa chiều, kết hợp hài hòa giữa góc nhìn nghiệp vụ (Business) và khía cạnh kỹ thuật (Technical)." 
+        }
       ]
     },
     projects: {
