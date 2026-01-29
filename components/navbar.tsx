@@ -61,7 +61,7 @@ export function Navbar() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-white">
         <DropdownMenuItem onClick={() => setLanguage("en")} className="cursor-pointer">
-          ᴇɴɢ English (ENG)
+          ᴇɴ English (ENG)
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setLanguage("vi")} className="cursor-pointer">
           🇻🇳 Tiếng Việt (VN)
