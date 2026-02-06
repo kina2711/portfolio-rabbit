@@ -17,8 +17,24 @@ const fontBody = Be_Vietnam_Pro({
 });
 
 export const metadata: Metadata = {
-  title: "Thai Trung Kien | Analytics Engineer",
+  title: "Portfolio - Thai Trung Kien | Data Analyst & Analytics Engineer",
   description: "Portfolio of Thai Trung Kien - Data Analyst & Analytics Engineer",
+  openGraph: {
+    title: "Thai Trung Kien | Data Analyst & Analytics Engineer",
+    description: "Transforming complex datasets into a competitive advantage.",
+    url: "https://thaikien-portfolio.vercel.app",
+    siteName: "Thai Trung Kien Portfolio",
+    images: [
+      {
+        url: "/opengraph-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Thai Trung Kien Portfolio Preview",
+      },
+    ],
+    locale: "vi_VN",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { ArrowDown } from "lucide-react"
+import { ArrowRight, Calendar } from "lucide-react"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { useLanguage } from "@/components/language-provider"
@@ -9,18 +9,6 @@ import Image from "next/image"
 
 export function HeroSection() {
   const { t } = useLanguage()
-
-  const scrollToAbout = () => {
-    const element = document.getElementById('about')
-    if (element) {
-      const offset = 80
-      const bodyRect = document.body.getBoundingClientRect().top
-      const elementRect = element.getBoundingClientRect().top
-      const elementPosition = elementRect - bodyRect
-      const offsetPosition = elementPosition - offset
-      window.scrollTo({ top: offsetPosition, behavior: "smooth" })
-    }
-  }
 
   return (
     <section className="relative w-full min-h-screen flex items-center justify-center bg-slate-50 pt-20 pb-20 overflow-hidden">
@@ -76,13 +64,14 @@ export function HeroSection() {
                 transition={{ duration: 0.5, delay: 0.4 }}
                 className="pt-2"
             >
-                <Button 
-                    onClick={scrollToAbout}
-                    size="lg" 
-                    className="rounded-full px-8 h-12 bg-blue-900 hover:bg-blue-800 text-white font-medium text-lg transition-all hover:scale-105 shadow-xl shadow-blue-900/20"
-                >
-                    {t.nav.contact} <ArrowDown className="ml-2 h-5 w-5 animate-bounce" />
-                </Button>
+                <Link href="https://calendly.com/kienthai2711/30min" target="_blank" rel="noopener noreferrer">
+                    <Button 
+                        size="lg" 
+                        className="rounded-full px-8 h-12 bg-blue-900 hover:bg-blue-800 text-white font-medium text-lg transition-all hover:scale-105 shadow-xl shadow-blue-900/20"
+                    >
+                        {t.nav.contact} <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                </Link>
             </motion.div>
 
             {/* --- 4. SOCIAL ICONS --- */}
