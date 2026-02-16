@@ -1,89 +1,147 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { FolderGit2, ArrowRight } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { FolderGit2, ArrowRight, LayoutGrid, Database, LineChart, Stethoscope, Gamepad2, ShoppingCart } from "lucide-react"
 import Link from "next/link"
 import { useLanguage } from "@/components/language-provider"
+import { cn } from "@/lib/utils"
+
+const CATEGORIES = [
+  { id: "All", label: "All Projects", icon: LayoutGrid },
+  { id: "Healthcare", label: "Healthcare", icon: Stethoscope },
+  { id: "Data Engineering", label: "Data Engineering", icon: Database },
+  { id: "Marketing", label: "Marketing Analytics", icon: LineChart },
+  { id: "Game", label: "Game Analytics", icon: Gamepad2 },
+  { id: "Product", label: "Product & Banking", icon: ShoppingCart },
+]
 
 export function ProjectsSection() {
   const { t } = useLanguage()
+  const [activeCategory, setActiveCategory] = useState("All")
   
-  // Ép kiểu mảng dự án thành any[] để TypeScript không báo lỗi khi gọi .slug
-  const projects = t.projects.list as any[];
+  // Lấy danh sách dự án và ép kiểu
+  const allProjects = t.projects.list as any[];
+
+  // Lọc dự án
+  const filteredProjects = activeCategory === "All" 
+    ? allProjects 
+    : allProjects.filter(p => p.tags.some((tag: string) => tag.includes(activeCategory) || (activeCategory === "Product" && (tag.includes("Banking") || tag.includes("Product")))));
 
   return (
-    <section id="projects" className="py-24 bg-slate-50 relative overflow-hidden">
-      {/* Background decoration nhẹ */}
-      <div className="absolute top-0 left-0 w-full h-full bg-grid-slate-200/[0.04] -z-10" />
-
-      <div className="container mx-auto px-6 md:px-12 max-w-6xl">
-        <div className="text-center mb-16 space-y-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900">{t.projects.title}</h2>
-          <p className="text-slate-500 max-w-2xl mx-auto">{t.projects.desc}</p>
+    <section id="projects" className="py-12 md:py-24 bg-slate-50 min-h-screen">
+      <div className="container mx-auto px-4 md:px-8 max-w-7xl">
+        
+        {/* Header */}
+        <div className="mb-12">
+          <h2 className="text-3xl md:text-5xl font-bold text-slate-900 mb-4">{t.projects.title}</h2>
+          <p className="text-slate-500 text-lg max-w-2xl">{t.projects.desc}</p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: index * 0.05 }}
-              viewport={{ once: true }}
-              className="h-full"
-            >
-              {/* Bao quanh Card bằng Link tới slug */}
-              <Link href={`/projects/${project.slug || '#'}`} className="block h-full group">
-                
-                <Card className="h-full flex flex-col border border-slate-200 bg-white hover:border-blue-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-2xl overflow-hidden relative">
-                  
-                  <CardHeader className="p-6 pb-2">
-                    <div className="flex justify-between items-start mb-4">
-                      {/* Icon Folder */}
-                      <div className="p-3 bg-blue-50 text-blue-600 rounded-xl group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                        <FolderGit2 className="h-6 w-6" />
-                      </div>
-                      
-                      {/* Mũi tên chỉ hướng thay vì icon GitHub (để gợi ý người dùng bấm vào xem chi tiết) */}
-                      <div className="text-slate-300 group-hover:text-blue-600 transition-colors">
-                        <ArrowRight className="h-5 w-5" />
-                      </div>
-                    </div>
+        {/* Layout chính */}
+        <div className="flex flex-col lg:flex-row gap-8">
+          
+          {/* 1. SIDEBAR FILTER */}
+          <div className="lg:w-64 flex-shrink-0">
+            <div className="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 sticky top-24">
+              <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4 px-3">Categories</div>
+              <div className="space-y-1">
+                {CATEGORIES.map((cat) => {
+                  const Icon = cat.icon
+                  const isActive = activeCategory === cat.id
+                  return (
+                    <button
+                      key={cat.id}
+                      onClick={() => setActiveCategory(cat.id)}
+                      className={cn(
+                        "w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all duration-200",
+                        isActive 
+                          ? "bg-slate-900 text-white shadow-md transform scale-105" 
+                          : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                      )}
+                    >
+                      <Icon className={cn("w-4 h-4", isActive ? "text-slate-200" : "text-slate-400")} />
+                      {cat.label}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
 
-                    <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2 min-h-[56px]" title={project.title}>
-                      {project.title}
-                    </h3>
-                  </CardHeader>
+          {/* 2. PROJECT GRID */}
+          <div className="flex-1">
+            <motion.div layout className="grid gap-6 md:grid-cols-2 xl:grid-cols-2">
+              <AnimatePresence mode="popLayout">
+                {filteredProjects.map((project, index) => (
+                  <motion.div
+                    layout
+                    key={project.slug || index}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Link href={`/projects/${project.slug || '#'}`} className="block h-full group">
+                      <div className="h-full bg-white rounded-[2rem] p-6 md:p-8 shadow-sm border border-slate-100 hover:shadow-xl hover:border-blue-200 transition-all duration-300 flex flex-col relative overflow-hidden">
+                        
+                        {/* Background Decoration */}
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-50 to-transparent rounded-bl-[4rem] -mr-8 -mt-8 opacity-50 group-hover:opacity-100 transition-opacity" />
 
-                  <CardContent className="flex-1 px-6 pb-6 pt-0 flex flex-col">
-                    <p className="text-sm text-slate-500 mb-6 line-clamp-3 leading-relaxed">
-                      {project.description}
-                    </p>
-
-                    <div className="mt-auto">
-                        <div className="flex flex-wrap gap-2 mb-4">
-                        {project.tags.slice(0, 3).map((tag: string) => (
-                            <Badge key={tag} variant="secondary" className="font-medium text-xs bg-slate-100 text-slate-600 group-hover:bg-slate-200 transition-colors border-none">
-                                {tag}
-                            </Badge>
-                        ))}
-                        {project.tags.length > 3 && <span className="text-xs text-slate-400 self-center">+{project.tags.length - 3}</span>}
+                        {/* Card Header */}
+                        <div className="flex justify-between items-start mb-6 relative z-10">
+                          <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-700 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300 shadow-sm">
+                             <FolderGit2 className="w-6 h-6" />
+                          </div>
+                          <div className="bg-slate-50 px-3 py-1 rounded-full text-xs font-bold text-slate-500 border border-slate-100 group-hover:bg-white group-hover:text-blue-600 transition-colors">
+                            {project.tags[0]}
+                          </div>
                         </div>
 
-                        <div className="text-xs text-emerald-700 bg-emerald-50 px-3 py-2 rounded-lg border border-emerald-100 font-medium flex items-center gap-2">
-                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
-                           <span className="truncate">{project.metrics}</span>
+                        {/* Card Title & Desc */}
+                        <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-3 leading-tight group-hover:text-blue-600 transition-colors">
+                          {project.title}
+                        </h3>
+                        <p className="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-3">
+                          {project.description}
+                        </p>
+
+                        {/* Metrics "Pill" */}
+                        <div className="mt-auto">
+                           <div className="bg-emerald-50/80 rounded-2xl p-4 border border-emerald-100/50 mb-5">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                                <span className="text-xs font-bold text-emerald-700 uppercase tracking-wide">Impact</span>
+                              </div>
+                              <p className="text-sm font-semibold text-emerald-900 leading-snug">
+                                {project.metrics}
+                              </p>
+                           </div>
+
+                           {/* Footer Action */}
+                           <div className="flex items-center justify-between pt-2 border-t border-slate-50">
+                              <div className="flex -space-x-2">
+                                {[1,2].map(i => (
+                                  <div key={i} className="w-8 h-8 rounded-full bg-slate-100 border-2 border-white flex items-center justify-center text-[10px] text-slate-400">
+                                    {i === 1 ? 'ME' : 'AI'}
+                                  </div>
+                                ))}
+                              </div>
+                              <div className="flex items-center text-sm font-bold text-slate-900 group-hover:translate-x-1 transition-transform">
+                                View Case Study <ArrowRight className="w-4 h-4 ml-2" />
+                              </div>
+                           </div>
                         </div>
-                    </div>
-                  </CardContent>
-                </Card>
 
-              </Link>
-
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </motion.div>
-          ))}
+          </div>
         </div>
       </div>
     </section>

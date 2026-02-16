@@ -1,183 +1,161 @@
 import { DATA } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Github, ExternalLink, Wrench, CheckCircle, Target, ListOrdered } from "lucide-react";
+import { ArrowLeft, Github, Calendar, Layers, BarChart3, ArrowUpRight, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-// --- HÀM TÌM KIẾM DỰ ÁN ---
+// --- LOGIC TÌM KIẾM ---
 function getProject(slug: string) {
-  console.log(`[DEBUG] Đang tìm dự án với slug: "${slug}"`);
-
-  // 1. Tìm trong Tiếng Anh
   const projectEn = DATA.en.projects.list.find((p) => (p as any).slug === slug);
-  if (projectEn) {
-    console.log(`[DEBUG] Tìm thấy bên EN: "${projectEn.title}"`);
-    return projectEn;
-  }
-
-  // 2. Tìm trong Tiếng Việt
+  if (projectEn) return projectEn;
   const projectVi = DATA.vi.projects.list.find((p) => (p as any).slug === slug);
-  if (projectVi) {
-    console.log(`[DEBUG] Tìm thấy bên VI: "${projectVi.title}"`);
-    return projectVi;
-  }
-
-  // 3. Không tìm thấy
-  console.log(`[DEBUG] Không tìm thấy dự án nào khớp với slug: "${slug}"`);
+  if (projectVi) return projectVi;
   return null;
 }
 
-// --- QUAN TRỌNG: CẬP NHẬT TYPE VÀ ASYNC CHO NEXT.JS 15+ ---
-export default async function ProjectDetailPage({ 
-  params 
-}: { 
-  params: Promise<{ slug: string }> 
-}) {
-  
+export default async function ProjectDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const slug = resolvedParams.slug;
+  const project = getProject(resolvedParams.slug);
 
-  // Gọi hàm tìm kiếm với slug đã lấy được
-  const project = getProject(slug);
+  if (!project) return notFound();
 
-  // Nếu không tìm thấy, trả về trang 404
-  if (!project) {
-    return notFound();
-  }
-
-  // Lấy phần nội dung chi tiết
   const details = (project as any).details;
-
-  // --- CHUẨN BỊ DỮ LIỆU HIỂN THỊ (FALLBACK) ---
-  const problemTitle = details?.problem?.title || "The Challenge";
-  const problemContent = details?.problem?.content || project.objective || "Thông tin đang cập nhật...";
-
-  const toolsTitle = details?.tools?.title || "Tech Stack & Tools";
-  const toolsItems = details?.tools?.items || [];
-
-  const processTitle = details?.process?.title || "The Process";
-  const processSteps = details?.process?.steps || []; 
-
-  const resultTitle = details?.result?.title || "Impact & Results";
-  const resultContent = details?.result?.content || project.metrics || "Thông tin đang cập nhật...";
+  
+  // Data Fallback
+  const problemContent = details?.problem?.content || project.objective;
+  const toolsItems = details?.tools?.items || project.tags;
+  const processSteps = details?.process?.steps || [];
+  const resultContent = details?.result?.content || project.metrics;
 
   return (
-    <main className="min-h-screen bg-white pb-24 font-sans text-slate-900">
+    <main className="min-h-screen bg-[#F3F4F6] pb-20 font-sans text-slate-800">
       
-      {/* HEADER SECTION */}
-      <div className="bg-slate-50 border-b border-slate-200">
-        <div className="container mx-auto px-6 md:px-12 py-16 max-w-4xl">
-          <Link href="/#projects">
-            <Button variant="ghost" className="mb-8 -ml-4 text-slate-500 hover:text-blue-600 pl-0 hover:bg-transparent transition-colors">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Back to Portfolio
-            </Button>
-          </Link>
-
-          <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 leading-tight">
-            {project.title}
-          </h1>
-
-          <div className="flex flex-wrap gap-3 mb-8">
-            {project.tags.map((tag: string, index: number) => (
-              <span key={index} className="px-4 py-1.5 bg-blue-100 text-blue-700 text-sm font-semibold rounded-full border border-blue-200">
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          <div className="flex gap-4">
-             {project.link && (
-               <Link href={project.link} target="_blank">
-                  <Button className="bg-slate-900 text-white hover:bg-slate-800 gap-2 rounded-full px-6 h-12 shadow-lg hover:shadow-xl transition-all hover:-translate-y-1">
-                     <Github className="w-5 h-5"/> View Source Code
-                  </Button>
-               </Link>
-             )}
-          </div>
+      {/* 1. TOP NAVIGATION */}
+      <div className="bg-white border-b border-slate-200 sticky top-0 z-50 bg-opacity-80 backdrop-blur-md">
+        <div className="container mx-auto px-6 max-w-7xl h-16 flex items-center justify-between">
+            <Link href="/#projects">
+                <Button variant="ghost" className="text-slate-500 hover:text-slate-900 -ml-4">
+                    <ArrowLeft className="w-4 h-4 mr-2" /> Back
+                </Button>
+            </Link>
+            <div className="flex gap-2">
+                {project.link && (
+                    <Link href={project.link} target="_blank">
+                        <Button size="sm" className="bg-slate-900 text-white rounded-full px-5 hover:bg-slate-800">
+                            <Github className="w-4 h-4 mr-2"/> Source
+                        </Button>
+                    </Link>
+                )}
+            </div>
         </div>
       </div>
 
-      {/* CONTENT SECTION */}
-      <div className="container mx-auto px-6 md:px-12 max-w-3xl py-16 space-y-20">
+      <div className="container mx-auto px-6 max-w-7xl py-10">
         
-        {/* 1. CHALLENGE */}
-        <section>
-           <div className="flex items-center gap-3 mb-6">
-             <div className="p-2.5 bg-red-50 rounded-xl text-red-600 border border-red-100">
-                <Target className="w-6 h-6"/>
-             </div>
-             <h2 className="text-2xl font-bold text-slate-900">{problemTitle}</h2>
-           </div>
-           <p className="text-lg text-slate-600 leading-relaxed text-justify">
-             {problemContent}
-           </p>
-        </section>
+        {/* 2. HEADER DASHBOARD */}
+        <div className="mb-10">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+                <div>
+                    <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-3">
+                        {project.title}
+                    </h1>
+                    <div className="flex flex-wrap gap-2">
+                        {project.tags.map((tag: string, i: number) => (
+                            <span key={i} className="px-3 py-1 bg-white border border-slate-200 rounded-full text-xs font-semibold text-slate-600 shadow-sm">
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            </div>
 
-        {/* 2. TOOLS */}
-        <section className="bg-slate-50 p-8 rounded-2xl border border-slate-100">
-           <div className="flex items-center gap-3 mb-6">
-             <div className="p-2.5 bg-blue-50 rounded-xl text-blue-600 border border-blue-100">
-                <Wrench className="w-6 h-6"/>
-             </div>
-             <h2 className="text-2xl font-bold text-slate-900">{toolsTitle}</h2>
-           </div>
-           <div className="flex flex-wrap gap-3">
-             {toolsItems.length > 0 ? (
-               toolsItems.map((tool: string, i: number) => (
-                 <span key={i} className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-slate-700 font-medium shadow-sm">
-                   {tool}
-                 </span>
-               ))
-             ) : (
-                project.tags.map((tag: string, i: number) => (
-                    <span key={i} className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-slate-500 font-medium shadow-sm opacity-70">
-                      {tag}
-                    </span>
-                  ))
-             )}
-           </div>
-        </section>
+            {/* KEY METRIC CARD */}
+            <div className="bg-slate-900 rounded-[2rem] p-8 md:p-10 text-white shadow-xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500 rounded-full mix-blend-overlay filter blur-3xl opacity-20 -mr-10 -mt-10"></div>
+                <div className="relative z-10">
+                    <div className="flex items-center gap-3 mb-4 text-blue-200">
+                        <BarChart3 className="w-6 h-6" />
+                        <span className="text-sm font-bold uppercase tracking-widest">Key Result / Impact</span>
+                    </div>
+                    <div className="text-2xl md:text-4xl font-medium leading-relaxed max-w-4xl">
+                        "{resultContent}"
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        {/* 3. PROCESS */}
-        <section>
-           <div className="flex items-center gap-3 mb-8">
-             <div className="p-2.5 bg-purple-50 rounded-xl text-purple-600 border border-purple-100">
-                <ListOrdered className="w-6 h-6"/>
-             </div>
-             <h2 className="text-2xl font-bold text-slate-900">{processTitle}</h2>
-           </div>
-           <div className="space-y-8 pl-2">
-              {processSteps.length > 0 ? (
-                 processSteps.map((step: string, i: number) => (
-                   <div key={i} className="flex gap-6 group">
-                      <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-slate-100 text-slate-400 font-bold text-xl group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
-                        {i + 1}
-                      </div>
-                      <div className="pt-2.5">
-                        <p className="text-lg text-slate-600 leading-relaxed">{step}</p>
-                      </div>
-                   </div>
-                 ))
-              ) : (
-                 <p className="text-slate-600 text-lg leading-relaxed italic">
-                    {project.description}
-                 </p>
-              )}
-           </div>
-        </section>
+        {/* 3. BENTO GRID LAYOUT */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-        {/* 4. RESULTS */}
-        <section>
-           <div className="flex items-center gap-3 mb-6">
-             <div className="p-2.5 bg-emerald-50 rounded-xl text-emerald-600 border border-emerald-100">
-                <CheckCircle className="w-6 h-6"/>
+            {/* CARD 1: THE CHALLENGE */}
+            <div className="md:col-span-2 bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                <div className="flex justify-between items-start mb-6">
+                    <h2 className="text-2xl font-bold text-slate-900">Why? (The Challenge)</h2>
+                    <div className="p-2 bg-red-50 rounded-full text-red-500"><ArrowUpRight className="w-5 h-5"/></div>
+                </div>
+                <p className="text-lg text-slate-600 leading-relaxed">
+                    {problemContent}
+                </p>
+            </div>
+
+            {/* CARD 2: TECH STACK */}
+            <div className="md:col-span-1 bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100 flex flex-col">
+                <div className="flex justify-between items-start mb-6">
+                    <h2 className="text-xl font-bold text-slate-900">Tech Stack</h2>
+                    <div className="p-2 bg-blue-50 rounded-full text-blue-500"><Layers className="w-5 h-5"/></div>
+                </div>
+                <div className="flex flex-wrap gap-2 content-start">
+                    {toolsItems.length > 0 ? toolsItems.map((tool: string, i: number) => (
+                        <span key={i} className="px-4 py-2 bg-slate-50 text-slate-700 rounded-xl text-sm font-semibold border border-slate-100">
+                            {tool}
+                        </span>
+                    )) : (
+                        <p className="text-slate-400 italic">Updating...</p>
+                    )}
+                </div>
+            </div>
+
+            {/* CARD 3: THE PROCESS */}
+            <div className="md:col-span-3 bg-white rounded-[2rem] p-8 md:p-10 shadow-sm border border-slate-100">
+                <div className="flex items-center gap-4 mb-8">
+                     <div className="p-3 bg-purple-50 rounded-2xl text-purple-600">
+                        <Calendar className="w-6 h-6"/>
+                     </div>
+                     <h2 className="text-2xl font-bold text-slate-900">How? (The Process)</h2>
+                </div>
+
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {processSteps.length > 0 ? processSteps.map((step: string, i: number) => (
+                        <div key={i} className="relative p-6 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-lg transition-all duration-300 group">
+                            <div className="absolute -top-3 -left-3 w-8 h-8 bg-slate-900 text-white rounded-lg flex items-center justify-center font-bold text-sm shadow-lg group-hover:scale-110 transition-transform">
+                                {i + 1}
+                            </div>
+                            <p className="text-slate-700 font-medium leading-relaxed mt-2">
+                                {step}
+                            </p>
+                        </div>
+                    )) : (
+                        <div className="col-span-4 text-slate-500 italic p-4 text-center">
+                            {project.description}
+                        </div>
+                    )}
+                </div>
+            </div>
+
+             {/* CARD 4: WHAT */}
+             <div className="md:col-span-3 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-[2rem] p-10 text-center text-white shadow-lg mt-4">
+                <h2 className="text-2xl font-bold mb-4">Ready to see the code?</h2>
+                <p className="text-blue-100 mb-8 max-w-2xl mx-auto">
+                    Explore the full implementation details, database schema, and source code on my GitHub repository.
+                </p>
+                <Link href={project.link} target="_blank">
+                    <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 rounded-full px-10 font-bold shadow-xl border-none">
+                        View GitHub Repository
+                    </Button>
+                </Link>
              </div>
-             <h2 className="text-2xl font-bold text-slate-900">{resultTitle}</h2>
-           </div>
-           <div className="bg-emerald-50/60 p-8 rounded-2xl border border-emerald-100 text-slate-800 text-lg leading-relaxed shadow-sm">
-             {resultContent}
-           </div>
-        </section>
+
+        </div>
       </div>
     </main>
   );
