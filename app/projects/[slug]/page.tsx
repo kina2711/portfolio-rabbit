@@ -1,10 +1,10 @@
 import { DATA } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Github, Calendar, Layers, BarChart3, ArrowUpRight, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Github, Calendar, Layers, BarChart3, ArrowUpRight, Zap, Target, Lightbulb } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-// --- LOGIC TÌM KIẾM ---
+// Logic tìm dự án
 function getProject(slug: string) {
   const projectEn = DATA.en.projects.list.find((p) => (p as any).slug === slug);
   if (projectEn) return projectEn;
@@ -28,21 +28,21 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   const resultContent = details?.result?.content || project.metrics;
 
   return (
-    <main className="min-h-screen bg-[#F3F4F6] pb-20 font-sans text-slate-800">
+    <main className="min-h-screen bg-[#F8FAFC] pb-24 font-sans text-slate-800">
       
-      {/* 1. TOP NAVIGATION */}
-      <div className="bg-white border-b border-slate-200 sticky top-0 z-50 bg-opacity-80 backdrop-blur-md">
-        <div className="container mx-auto px-6 max-w-7xl h-16 flex items-center justify-between">
+      {/* 1. NAVBAR */}
+      <div className="bg-white/80 backdrop-blur-xl border-b border-slate-200 sticky top-0 z-50">
+        <div className="container mx-auto px-6 max-w-7xl h-20 flex items-center justify-between">
             <Link href="/#projects">
-                <Button variant="ghost" className="text-slate-500 hover:text-slate-900 -ml-4">
-                    <ArrowLeft className="w-4 h-4 mr-2" /> Back
+                <Button variant="ghost" className="text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-full">
+                    <ArrowLeft className="w-5 h-5 mr-2" /> Back to Portfolio
                 </Button>
             </Link>
-            <div className="flex gap-2">
+            <div className="flex gap-3">
                 {project.link && (
                     <Link href={project.link} target="_blank">
-                        <Button size="sm" className="bg-slate-900 text-white rounded-full px-5 hover:bg-slate-800">
-                            <Github className="w-4 h-4 mr-2"/> Source
+                        <Button className="bg-slate-900 text-white rounded-full px-6 hover:bg-slate-800 shadow-lg shadow-slate-900/20 hover:shadow-amber-900/20">
+                            <Github className="w-4 h-4 mr-2"/> View Code
                         </Button>
                     </Link>
                 )}
@@ -50,110 +50,119 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </div>
       </div>
 
-      <div className="container mx-auto px-6 max-w-7xl py-10">
+      <div className="container mx-auto px-6 max-w-7xl py-12">
         
-        {/* 2. HEADER DASHBOARD */}
-        <div className="mb-10">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
-                <div>
-                    <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-3">
-                        {project.title}
-                    </h1>
-                    <div className="flex flex-wrap gap-2">
-                        {project.tags.map((tag: string, i: number) => (
-                            <span key={i} className="px-3 py-1 bg-white border border-slate-200 rounded-full text-xs font-semibold text-slate-600 shadow-sm">
-                                {tag}
-                            </span>
-                        ))}
-                    </div>
-                </div>
+        {/* 2. TITLE AREA */}
+        <div className="mb-12 text-center md:text-left">
+            <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 mb-6 leading-tight tracking-tight">
+                {project.title}
+            </h1>
+            <div className="flex flex-wrap gap-3 justify-center md:justify-start">
+                {project.tags.map((tag: string, i: number) => (
+                    <span key={i} className="px-4 py-2 bg-white border border-slate-200 rounded-full text-sm font-semibold text-slate-600 shadow-sm">
+                        {tag}
+                    </span>
+                ))}
             </div>
+        </div>
 
-            {/* KEY METRIC CARD */}
-            <div className="bg-slate-900 rounded-[2rem] p-8 md:p-10 text-white shadow-xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500 rounded-full mix-blend-overlay filter blur-3xl opacity-20 -mr-10 -mt-10"></div>
+        {/* 3. BENTO GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+
+            {/* BLOCK 1: KEY METRIC */}
+            <div className="md:col-span-8 bg-slate-900 rounded-[2.5rem] p-10 text-white shadow-xl shadow-slate-900/10 relative overflow-hidden flex flex-col justify-between min-h-[300px]">
+                {/* Background Decor */}
+                <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500 rounded-full mix-blend-overlay filter blur-[100px] opacity-20 -mr-20 -mt-20"></div>
+                
                 <div className="relative z-10">
-                    <div className="flex items-center gap-3 mb-4 text-blue-200">
-                        <BarChart3 className="w-6 h-6" />
-                        <span className="text-sm font-bold uppercase tracking-widest">Key Result / Impact</span>
+                    <div className="flex items-center gap-3 mb-6 text-amber-200">
+                        <div className="p-2 bg-white/10 rounded-xl backdrop-blur-md">
+                           <BarChart3 className="w-6 h-6 text-amber-400" />
+                        </div>
+                        <span className="text-sm font-bold uppercase tracking-widest text-amber-500">Key Result / Impact</span>
                     </div>
-                    <div className="text-2xl md:text-4xl font-medium leading-relaxed max-w-4xl">
+                    <div className="text-3xl md:text-5xl font-medium leading-tight text-transparent bg-clip-text bg-gradient-to-br from-amber-100 via-amber-200 to-amber-500">
                         "{resultContent}"
                     </div>
                 </div>
             </div>
-        </div>
 
-        {/* 3. BENTO GRID LAYOUT */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-            {/* CARD 1: THE CHALLENGE */}
-            <div className="md:col-span-2 bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
-                <div className="flex justify-between items-start mb-6">
-                    <h2 className="text-2xl font-bold text-slate-900">Why? (The Challenge)</h2>
-                    <div className="p-2 bg-red-50 rounded-full text-red-500"><ArrowUpRight className="w-5 h-5"/></div>
+            {/* BLOCK 2: TECH STACK */}
+            <div className="md:col-span-4 bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 flex flex-col justify-between hover:border-amber-200 transition-colors">
+                <div>
+                    <div className="flex justify-between items-center mb-6">
+                        <h2 className="text-xl font-bold text-slate-900">Tech Stack</h2>
+                        <div className="p-3 bg-slate-100 rounded-full text-slate-600"><Layers className="w-5 h-5"/></div>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                        {toolsItems.map((tool: string, i: number) => (
+                            <span key={i} className="px-3 py-2 bg-slate-50 text-slate-700 rounded-xl text-xs font-bold border border-slate-100">
+                                {tool}
+                            </span>
+                        ))}
+                    </div>
                 </div>
-                <p className="text-lg text-slate-600 leading-relaxed">
+                <div className="mt-8 pt-6 border-t border-slate-50">
+                     <p className="text-xs text-slate-400 font-medium uppercase tracking-wider">Powered by</p>
+                     <p className="text-slate-600 font-semibold">Modern Data Stack</p>
+                </div>
+            </div>
+
+            {/* BLOCK 3: THE CHALLENGE (WHY?) */}
+            <div className="md:col-span-6 bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100 hover:shadow-lg hover:shadow-amber-50/50 hover:border-amber-200 transition-all duration-300 group">
+                <div className="flex justify-between items-start mb-8">
+                    <div className="flex items-center gap-4">
+                        <div className="p-4 bg-amber-50 rounded-2xl text-amber-600 group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300">
+                            <Target className="w-6 h-6"/>
+                        </div>
+                        <h2 className="text-2xl font-bold text-slate-900">The Challenge</h2>
+                    </div>
+                    <div className="bg-slate-50 p-2 rounded-full text-slate-400 group-hover:text-amber-500"><ArrowUpRight className="w-5 h-5"/></div>
+                </div>
+                <p className="text-lg text-slate-600 leading-relaxed text-justify">
                     {problemContent}
                 </p>
             </div>
 
-            {/* CARD 2: TECH STACK */}
-            <div className="md:col-span-1 bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100 flex flex-col">
-                <div className="flex justify-between items-start mb-6">
-                    <h2 className="text-xl font-bold text-slate-900">Tech Stack</h2>
-                    <div className="p-2 bg-blue-50 rounded-full text-blue-500"><Layers className="w-5 h-5"/></div>
-                </div>
-                <div className="flex flex-wrap gap-2 content-start">
-                    {toolsItems.length > 0 ? toolsItems.map((tool: string, i: number) => (
-                        <span key={i} className="px-4 py-2 bg-slate-50 text-slate-700 rounded-xl text-sm font-semibold border border-slate-100">
-                            {tool}
-                        </span>
-                    )) : (
-                        <p className="text-slate-400 italic">Updating...</p>
-                    )}
-                </div>
-            </div>
-
-            {/* CARD 3: THE PROCESS */}
-            <div className="md:col-span-3 bg-white rounded-[2rem] p-8 md:p-10 shadow-sm border border-slate-100">
+            {/* BLOCK 4: THE SOLUTION / PROCESS (HOW?) */}
+            <div className="md:col-span-6 bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100 hover:border-slate-200 transition-colors">
                 <div className="flex items-center gap-4 mb-8">
-                     <div className="p-3 bg-purple-50 rounded-2xl text-purple-600">
-                        <Calendar className="w-6 h-6"/>
+                     <div className="p-4 bg-slate-100 rounded-2xl text-slate-600">
+                        <Zap className="w-6 h-6"/>
                      </div>
-                     <h2 className="text-2xl font-bold text-slate-900">How? (The Process)</h2>
+                     <h2 className="text-2xl font-bold text-slate-900">The Solution</h2>
                 </div>
-
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {processSteps.length > 0 ? processSteps.map((step: string, i: number) => (
-                        <div key={i} className="relative p-6 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-lg transition-all duration-300 group">
-                            <div className="absolute -top-3 -left-3 w-8 h-8 bg-slate-900 text-white rounded-lg flex items-center justify-center font-bold text-sm shadow-lg group-hover:scale-110 transition-transform">
+                <div className="space-y-4">
+                    {processSteps.map((step: string, i: number) => (
+                        <div key={i} className="flex items-start gap-4 p-4 rounded-2xl bg-slate-50/50 border border-slate-50 hover:bg-amber-50/30 hover:border-amber-100 transition-colors">
+                            <div className="flex-shrink-0 w-8 h-8 bg-white border border-slate-200 rounded-full flex items-center justify-center font-bold text-xs text-slate-500 shadow-sm">
                                 {i + 1}
                             </div>
-                            <p className="text-slate-700 font-medium leading-relaxed mt-2">
+                            <p className="text-slate-700 font-medium leading-relaxed text-sm mt-1">
                                 {step}
                             </p>
                         </div>
-                    )) : (
-                        <div className="col-span-4 text-slate-500 italic p-4 text-center">
-                            {project.description}
-                        </div>
-                    )}
+                    ))}
                 </div>
             </div>
 
-             {/* CARD 4: WHAT */}
-             <div className="md:col-span-3 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-[2rem] p-10 text-center text-white shadow-lg mt-4">
-                <h2 className="text-2xl font-bold mb-4">Ready to see the code?</h2>
-                <p className="text-blue-100 mb-8 max-w-2xl mx-auto">
-                    Explore the full implementation details, database schema, and source code on my GitHub repository.
-                </p>
-                <Link href={project.link} target="_blank">
-                    <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 rounded-full px-10 font-bold shadow-xl border-none">
-                        View GitHub Repository
-                    </Button>
-                </Link>
-             </div>
+            {/* BLOCK 5: CTA */}
+            <div className="md:col-span-12 mt-4 bg-gradient-to-r from-amber-500 to-orange-600 rounded-[2.5rem] p-12 text-center text-white shadow-2xl shadow-amber-500/20 relative overflow-hidden">
+                <div className="relative z-10 flex flex-col items-center">
+                    <div className="p-4 bg-white/20 rounded-full backdrop-blur-md mb-6 animate-pulse">
+                        <Lightbulb className="w-8 h-8 text-white" />
+                    </div>
+                    <h2 className="text-3xl font-bold mb-4">Want to see how I built this?</h2>
+                    <p className="text-amber-50 mb-8 max-w-2xl text-lg">
+                        Check out the source code to dive deeper into the technical implementation.
+                    </p>
+                    <Link href={project.link} target="_blank">
+                        <Button size="lg" className="bg-white text-amber-700 hover:bg-amber-50 hover:scale-105 rounded-full px-12 h-14 text-lg font-bold shadow-xl border-none transition-transform">
+                            View on GitHub <Github className="ml-2 w-5 h-5"/>
+                        </Button>
+                    </Link>
+                </div>
+            </div>
 
         </div>
       </div>
