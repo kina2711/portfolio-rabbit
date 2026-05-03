@@ -54,7 +54,7 @@ export function HeroSection() {
                     {t.hero.title.replace("Hi, I'm ", "").replace("Chào, mình là ", "")}
                 </h1>
                 <p 
-                    className="text-lg md:text-2xl text-slate-600 leading-relaxed w-full max-w-[1800px] mx-auto font-light"
+                    className="text-lg md:text-2xl text-slate-600 leading-relaxed w-full max-w-[1400px] mx-auto font-light"
                     dangerouslySetInnerHTML={{ __html: t.hero.desc }}
                 />
             </motion.div>
