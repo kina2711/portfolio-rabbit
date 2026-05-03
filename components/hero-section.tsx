@@ -18,8 +18,8 @@ export function HeroSection() {
         <div className="absolute top-[30%] right-[10%] w-96 h-96 bg-orange-100/40 rounded-full mix-blend-multiply filter blur-[100px] opacity-50 animate-blob animation-delay-2000"></div>
       </div>
 
-      <div className="container mx-auto px-6 md:px-12 max-w-7xl z-10">
-        <div className="flex flex-col items-center text-center space-y-6">
+      <div className="container mx-auto px-6 md:px-12 w-full max-w-[1400px] z-10">
+        <div className="flex flex-col items-center text-center space-y-6 w-full">
             
             {/* --- 1. AVATAR --- */}
             <motion.div
@@ -45,7 +45,7 @@ export function HeroSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="space-y-4"
+                className="space-y-4 w-full"
             >
                 <p className="text-amber-600 font-bold tracking-[0.2em] uppercase text-sm md:text-base">
                     Data Analyst & Analytics Engineer
@@ -54,7 +54,7 @@ export function HeroSection() {
                     {t.hero.title.replace("Hi, I'm ", "").replace("Chào, mình là ", "")}
                 </h1>
                 <p 
-                    className="text-lg md:text-2xl text-slate-600 leading-relaxed max-w-7xl mx-auto font-light"
+                    className="text-lg md:text-2xl text-slate-600 leading-relaxed w-full max-w-[95%] lg:max-w-[90%] mx-auto font-light"
                     dangerouslySetInnerHTML={{ __html: t.hero.desc }}
                 />
             </motion.div>
