@@ -53,9 +53,10 @@ export function HeroSection() {
                 <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
                     {t.hero.title.replace("Hi, I'm ", "").replace("Chào, mình là ", "")}
                 </h1>
-                <p className="text-lg md:text-2xl text-slate-600 leading-relaxed max-w-3xl mx-auto font-light">
-                    {t.hero.desc}
-                </p>
+                <p 
+                    className="text-lg md:text-2xl text-slate-600 leading-relaxed max-w-3xl mx-auto font-light"
+                    dangerouslySetInnerHTML={{ __html: t.hero.desc }}
+                />
             </motion.div>
 
             {/* --- 3. CONTACT ME BUTTON --- */}

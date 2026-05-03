@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   description: "Portfolio of Thai Trung Kien - Data Analyst & Analytics Engineer",
   openGraph: {
     title: "Thai Trung Kien | Data Analyst & Analytics Engineer",
-    description: "Transforming complex datasets into a competitive advantage.",
+    description: "A HYBRID DATA PROFESSIONAL with a rigorous systems-thinking approach derived from a pharmacy background.",
     url: "https://thaikien-portfolio.vercel.app",
     siteName: "Thai Trung Kien Portfolio",
     images: [
